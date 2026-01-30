@@ -2,6 +2,7 @@ package microservices.book.multiplication.challenge;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import microservices.book.multiplication.serviceclients.GamificationServiceClient;
 import microservices.book.multiplication.user.User;
 import microservices.book.multiplication.user.UserRepository;
 import org.springframework.stereotype.Service;
@@ -15,14 +16,15 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     private final UserRepository userRepository;
     private final ChallengeAttemptRepository attemptRepository;
+    private final GamificationServiceClient gameClient;
 
     @Override
     public ChallengeAttempt verifyAttempt(ChallengeAttemptDTO attemptDTO) {
         // We don't use identifiers for now
-        User user = userRepository.findByAlias(attemptDTO.getUserAlias())
+        User user = userRepository.findByAlias(attemptDTO.getAlias())
                 .orElseGet(() -> {
-                    log.info("Creating new user with alias {}", attemptDTO.getUserAlias());
-                    return userRepository.save(new User(attemptDTO.getUserAlias()));
+                    log.info("Creating new user with alias {}", attemptDTO.getAlias());
+                    return userRepository.save(new User(attemptDTO.getAlias()));
                 });
 
         // Check if the attempt is correct
@@ -36,14 +38,18 @@ public class ChallengeServiceImpl implements ChallengeService {
                 attemptDTO.getGuess(),
                 isCorrect
         );
-        // stores the attempt
-        return attemptRepository.save(checkedAttempt);
+        // Stores the attempt
+        ChallengeAttempt storedAttempt = attemptRepository.save(checkedAttempt);
+        // Sends the attempt to gamification and prints the response
+        boolean status = gameClient.sendAttempt(storedAttempt);
+        log.info("Gamification service response: {}", status);
+        return storedAttempt;
     }
 
     @Override
     public List<ChallengeAttempt> getStatsForUser(final String userAlias) {
-//        return attemptRepository.findTop10ByUserAliasOrderByIdDesc(userAlias);
-        return attemptRepository.findAllByUserAlias(userAlias);
+        return attemptRepository.findTop10ByUserAliasOrderByIdDesc(userAlias);
+//        return attemptRepository.findAllByUserAlias(userAlias);
     }
 
 }

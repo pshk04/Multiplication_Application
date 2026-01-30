@@ -10,8 +10,8 @@ import javax.persistence.*;
  */
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ChallengeAttempt {
     @Id
     @GeneratedValue
@@ -24,7 +24,7 @@ public class ChallengeAttempt {
     private int resultAttempt;
     private boolean correct;
 
-    public ChallengeAttempt(final User user, final int factorA, final int factorB, final int resultAttempt, final boolean correct){
-        this(null, user, factorA, factorB, resultAttempt, correct);
-    }
+//    public ChallengeAttempt(final User user, final int factorA, final int factorB, final int resultAttempt, final boolean correct){
+//        this(null, user, factorA, factorB, resultAttempt, correct);
+//    }
 }
