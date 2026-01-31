@@ -48,7 +48,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public List<ChallengeAttempt> getStatsForUser(final String userAlias) {
-        return attemptRepository.findTop10ByUserAliasOrderByIdDesc(userAlias);
+        return attemptRepository.findTop5ByUserAliasOrderByIdDesc(userAlias);
 //        return attemptRepository.findAllByUserAlias(userAlias);
     }
 

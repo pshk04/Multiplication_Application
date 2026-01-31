@@ -26,6 +26,6 @@ public class ChallengeGeneratorServiceImpl implements ChallengeGeneratorService 
 
     @Override
     public Challenge randomChallenge() {
-        return new Challenge(next(), next());
+        return new Challenge(next(), 42);
     }
 }

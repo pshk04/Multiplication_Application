@@ -11,6 +11,6 @@ public interface ChallengeAttemptRepository extends CrudRepository<ChallengeAtte
      * @param userAlias
      * @return the last 10 attempts for a given user, identified by their alias.
      */
-    List<ChallengeAttempt> findTop10ByUserAliasOrderByIdDesc(String userAlias);
+    List<ChallengeAttempt> findTop5ByUserAliasOrderByIdDesc(String userAlias);
     List<ChallengeAttempt> findAllByUserAlias(String userAlias);
 }

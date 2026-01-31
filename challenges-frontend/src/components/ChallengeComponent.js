@@ -118,14 +118,14 @@ class ChallengeComponent extends React.Component {
                     </div>
                     <form onSubmit={this.handleSubmitResult} >
                         <div className="form-container">
-                            <label htmlFor="alias">Your alias:</label>
+                            <label htmlFor="alias">Your Alias:</label>
                             <input id="alias" type="text" maxLength="12"
                                        name="user"
                                        value={this.state.user}
                                        onChange={this.handleChange}/>
                         </div>
                         <div className="form-container">
-                            <label htmlFor="guess">Your guess:</label>
+                            <label htmlFor="guess">Your Guess:</label>
                             <input id="guess" type="number" min="0"
                                        name="guess"
                                        value={this.state.guess}
