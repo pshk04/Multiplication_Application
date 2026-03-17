@@ -87,7 +87,7 @@ public class ChallengeServiceTest {
         ChallengeAttempt attempt1 = new ChallengeAttempt(1L, user, 50, 60, 3010, false);
         ChallengeAttempt attempt2 = new ChallengeAttempt(2L, user, 50, 60, 3051, false);
         List<ChallengeAttempt> lastAttempts = List.of(attempt1, attempt2);
-        given(attemptRepository.findTop10ByUserAliasOrderByIdDesc("john_doe"))
+        given(attemptRepository.findTop5ByUserAliasOrderByIdDesc("john_doe"))
                 .willReturn(lastAttempts);
 
         // when
