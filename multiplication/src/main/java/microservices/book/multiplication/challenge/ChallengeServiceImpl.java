@@ -22,7 +22,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public ChallengeAttempt verifyAttempt(ChallengeAttemptDTO attemptDTO) {
         // Check if the users already exists for that alias, otherwise create it
-        log.info("User with alias {}", attemptDTO.getAlias());
+        log.info("For User with alias {}", attemptDTO.getAlias());
         User user = userRepository.findByAlias(attemptDTO.getAlias())
                 .orElseGet(() -> {
                     log.info("Creating new users with alias {}",

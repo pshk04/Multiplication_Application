@@ -13,6 +13,7 @@ public interface ChallengeAttemptRepository extends CrudRepository<ChallengeAtte
      */
     List<ChallengeAttempt> findTop5ByUserAliasOrderByIdDesc(String userAlias);
 //    List<ChallengeAttempt> findAllByUserAlias(String userAlias);
+
     @Query("SELECT a FROM ChallengeAttempt a WHERE a.user.alias = ?1 ORDER BY a.id DESC")
     List<ChallengeAttempt> lastAttempts(String userAlias);
 }
