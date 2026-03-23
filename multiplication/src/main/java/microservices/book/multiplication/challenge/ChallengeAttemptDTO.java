@@ -1,9 +1,8 @@
 
 package microservices.book.multiplication.challenge;
 
+import jakarta.validation.constraints.*;
 import lombok.Value;
-
-import javax.validation.constraints.*;
 
 /**
  * Attempt coming from the user
@@ -17,5 +16,4 @@ public class ChallengeAttemptDTO {
     String alias;
     @Positive(message = "How could you possibly get a negative result here? Try again.")
     int guess;
-
 }

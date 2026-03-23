@@ -1,13 +1,13 @@
 package microservices.book.gamification.game;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import microservices.book.gamification.challenge.ChallengeSolvedDTO;
+import microservices.book.gamification.challenge.ChallengeSolvedEvent;
 import microservices.book.gamification.game.badgeprocessors.BadgeProcessor;
 import microservices.book.gamification.game.domain.BadgeCard;
 import microservices.book.gamification.game.domain.BadgeType;
 import microservices.book.gamification.game.domain.ScoreCard;
 import org.springframework.stereotype.Service;
-
+import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -22,13 +22,14 @@ public class GameServiceImpl implements GameService {
     private final BadgeRepository badgeRepository;
     // Spring injects all the @Component beans in this list
     private final List<BadgeProcessor> badgeProcessors;
+
     @Override
-    public GameResult newAttemptForUser(ChallengeSolvedDTO challenge) {
+    @Transactional
+    public GameResult newAttemptForUser(final ChallengeSolvedEvent challenge) {
         // We give points only if it's correct
         if (challenge.isCorrect()) {
             ScoreCard scoreCard = new ScoreCard(challenge.getUserId(),
                     challenge.getAttemptId());
-            log.info("SAVING User Attempt {} {} {}", scoreCard.getUserId(), scoreCard.getCardId(), scoreCard.getAttemptId());
             scoreRepository.save(scoreCard);
             log.info("User {} scored {} points for attempt id {}",
                     challenge.getUserAlias(), scoreCard.getScore(),
@@ -51,7 +52,7 @@ public class GameServiceImpl implements GameService {
      * to give new badges in case their conditions are met.
      */
     private List<BadgeCard> processForBadges(
-            final ChallengeSolvedDTO solvedChallenge) {
+            final ChallengeSolvedEvent solvedChallenge) {
         Optional<Integer> optTotalScore = scoreRepository.
                 getTotalScoreForUser(solvedChallenge.getUserId());
         if (optTotalScore.isEmpty()) return Collections.emptyList();

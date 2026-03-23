@@ -1,23 +1,21 @@
 package microservices.book.multiplication.challenge;
-import microservices.book.multiplication.serviceclients.GamificationServiceClient;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import microservices.book.multiplication.user.User;
 import microservices.book.multiplication.user.UserRepository;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.BDDAssertions.then;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-
-import java.util.List;
-import java.util.Optional;
+import static org.mockito.AdditionalAnswers.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ChallengeServiceTest {
@@ -26,58 +24,79 @@ public class ChallengeServiceTest {
 
     @Mock
     private UserRepository userRepository;
-
     @Mock
     private ChallengeAttemptRepository attemptRepository;
-
     @Mock
-    private GamificationServiceClient gameClient;
+    private ChallengeEventPub eventPub;
 
     @BeforeEach
-    public void setUp(){
-        challengeService = new ChallengeServiceImpl(userRepository, attemptRepository, gameClient);
-        given(attemptRepository.save(any())).will(returnsFirstArg());
+    public void setUp() {
+        challengeService = new ChallengeServiceImpl(
+                userRepository,
+                attemptRepository,
+                eventPub
+        );
     }
 
     @Test
-    public void checkCorrectAttemptTest(){
+    public void checkCorrectAttemptTest() {
         // given
-        ChallengeAttemptDTO attemptDTO = new ChallengeAttemptDTO(50,60, "john_doe", 3000);
+        given(attemptRepository.save(any()))
+                .will(returnsFirstArg());
+        ChallengeAttemptDTO attemptDTO =
+                new ChallengeAttemptDTO(50, 60, "john_doe", 3000);
+
         // when
-        ChallengeAttempt resultAttempt = challengeService.verifyAttempt(attemptDTO);
-        //then
+        ChallengeAttempt resultAttempt =
+                challengeService.verifyAttempt(attemptDTO);
+
+        // then
         then(resultAttempt.isCorrect()).isTrue();
         verify(userRepository).save(new User("john_doe"));
         verify(attemptRepository).save(resultAttempt);
-        verify(gameClient).sendAttempt(resultAttempt);
+        verify(eventPub).challengeSolved(resultAttempt);
     }
 
     @Test
-    public void checkWrongAttemptTest(){
+    public void checkWrongAttemptTest() {
         // given
-        ChallengeAttemptDTO attemptDTO = new ChallengeAttemptDTO(50,60, "john_doe", 5000);
+        given(attemptRepository.save(any()))
+                .will(returnsFirstArg());
+        ChallengeAttemptDTO attemptDTO =
+                new ChallengeAttemptDTO(50, 60, "john_doe", 5000);
+
         // when
-        ChallengeAttempt resultAttempt = challengeService.verifyAttempt(attemptDTO);
-        //then
+        ChallengeAttempt resultAttempt =
+                challengeService.verifyAttempt(attemptDTO);
+
+        // then
         then(resultAttempt.isCorrect()).isFalse();
+        verify(userRepository).save(new User("john_doe"));
+        verify(attemptRepository).save(resultAttempt);
+        verify(eventPub).challengeSolved(resultAttempt);
     }
 
     @Test
-    public void checkExistingUserTest(){
-
-        User existingUser = new User(1L, "john_doe");
-        given(userRepository.findByAlias("john_doe")).willReturn(Optional.of(existingUser));
-
+    public void checkExistingUserTest() {
         // given
-        ChallengeAttemptDTO attemptDTO = new ChallengeAttemptDTO(50,60, "john_doe", 5000);
+        given(attemptRepository.save(any()))
+                .will(returnsFirstArg());
+        User existingUser = new User(1L, "john_doe");
+        given(userRepository.findByAlias("john_doe"))
+                .willReturn(Optional.of(existingUser));
+        ChallengeAttemptDTO attemptDTO =
+                new ChallengeAttemptDTO(50, 60, "john_doe", 5000);
+
         // when
-        ChallengeAttempt resultAttempt = challengeService.verifyAttempt(attemptDTO);
-        //then
-        then(resultAttempt.isCorrect()).isTrue();
+        ChallengeAttempt resultAttempt =
+                challengeService.verifyAttempt(attemptDTO);
+
+        // then
+        then(resultAttempt.isCorrect()).isFalse();
         then(resultAttempt.getUser()).isEqualTo(existingUser);
         verify(userRepository, never()).save(any());
         verify(attemptRepository).save(resultAttempt);
-        verify(gameClient).sendAttempt(resultAttempt);
+        verify(eventPub).challengeSolved(resultAttempt);
     }
 
     @Test
@@ -97,5 +116,4 @@ public class ChallengeServiceTest {
         // then
         then(latestAttemptsResult).isEqualTo(lastAttempts);
     }
-
 }

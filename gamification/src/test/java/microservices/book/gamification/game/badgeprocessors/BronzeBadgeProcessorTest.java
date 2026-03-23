@@ -1,5 +1,5 @@
 package microservices.book.gamification.game.badgeprocessors;
-
+import microservices.book.gamification.challenge.ChallengeSolvedEvent;
 import microservices.book.gamification.game.domain.BadgeType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,14 +21,18 @@ class BronzeBadgeProcessorTest {
     @Test
     public void shouldGiveBadgeIfScoreOverThreshold() {
         Optional<BadgeType> badgeType = badgeProcessor
-                .processForOptionalBadge(60, List.of(), null);
+                .processForOptionalBadge(60, List.of(),
+                        new ChallengeSolvedEvent(1L, true, 42, 10, 1L, "John")
+                );
         assertThat(badgeType).contains(BadgeType.BRONZE);
     }
 
     @Test
     public void shouldNotGiveBadgeIfScoreUnderThreshold() {
         Optional<BadgeType> badgeType = badgeProcessor
-                .processForOptionalBadge(40, List.of(), null);
+                .processForOptionalBadge(40, List.of(),
+                        new ChallengeSolvedEvent(1L, true, 42, 10, 1L, "John")
+                );
         assertThat(badgeType).isEmpty();
     }
 }

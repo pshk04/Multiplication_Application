@@ -1,14 +1,13 @@
 package microservices.book.multiplication.user;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+import jakarta.persistence.Table;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-/**
- * Stores information to identify the user.
- */
 @Entity
+@Table(name="USERS")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,8 +15,7 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
-    private String alias; // first name of the user
-
+    private String alias;
     public User(final String userAlias) {
         this(null, userAlias);
     }

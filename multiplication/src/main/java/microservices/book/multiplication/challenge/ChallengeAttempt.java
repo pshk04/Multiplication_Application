@@ -1,9 +1,12 @@
 package microservices.book.multiplication.challenge;
 
-import lombok.*;
-import microservices.book.multiplication.user.User;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import microservices.book.multiplication.user.User;
 
 /**
  * Identifies the attempt from a {@link User} to solve a challenge.
@@ -12,7 +15,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChallengeAttempt {
+public class ChallengeAttempt{
     @Id
     @GeneratedValue
     private Long id;
@@ -21,10 +24,6 @@ public class ChallengeAttempt {
     private User user;
     private int factorA;
     private int factorB;
-    private int resultAttempt;
+    private int guess;
     private boolean correct;
-
-//    public ChallengeAttempt(final User user, final int factorA, final int factorB, final int resultAttempt, final boolean correct){
-//        this(null, user, factorA, factorB, resultAttempt, correct);
-//    }
 }

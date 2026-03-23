@@ -75,7 +75,7 @@ class ChallengeComponent extends React.Component {
                         if (json.correct) {
                             this.updateMessage("Congratulations, " +this.state.user +" your guess is correct");
                         } else {
-                            this.updateMessage("Oops! Your guess " + json.resultAttempt +
+                            this.updateMessage("Oops! Your guess " + json.guess +
                                 " is wrong, but keep playing!");
                         }
                         this.updateLastAttempts(this.state.user);

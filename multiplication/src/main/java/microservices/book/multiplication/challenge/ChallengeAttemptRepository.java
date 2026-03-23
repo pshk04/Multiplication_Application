@@ -1,7 +1,7 @@
 package microservices.book.multiplication.challenge;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.CrudRepositoryExtensionsKt;
 
 import java.util.List;
 
@@ -12,5 +12,7 @@ public interface ChallengeAttemptRepository extends CrudRepository<ChallengeAtte
      * @return the last 10 attempts for a given user, identified by their alias.
      */
     List<ChallengeAttempt> findTop5ByUserAliasOrderByIdDesc(String userAlias);
-    List<ChallengeAttempt> findAllByUserAlias(String userAlias);
+//    List<ChallengeAttempt> findAllByUserAlias(String userAlias);
+    @Query("SELECT a FROM ChallengeAttempt a WHERE a.user.alias = ?1 ORDER BY a.id DESC")
+    List<ChallengeAttempt> lastAttempts(String userAlias);
 }
