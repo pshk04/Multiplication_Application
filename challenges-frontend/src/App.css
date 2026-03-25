@@ -11,6 +11,7 @@ table, th, td {
     text-align: center;
     border: 2px solid black;
     margin: 5px 5px;
+    background: grey;
 }
 th {
     background-color: #f2f2f2;

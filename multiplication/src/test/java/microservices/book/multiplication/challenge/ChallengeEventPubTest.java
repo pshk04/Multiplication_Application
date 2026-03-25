@@ -7,8 +7,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.amqp.core.AmqpTemplate;
-
+//import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import java.io.IOException;
 import microservices.book.multiplication.user.User;
 
 import static org.assertj.core.api.BDDAssertions.*;
@@ -20,11 +21,14 @@ class ChallengeEventPubTest {
     private ChallengeEventPub challengeEventPub;
 
     @Mock
-    private AmqpTemplate amqpTemplate;
+    private RabbitTemplate rabbitTemplate;
+
+//    @Mock
+//    private AmqpTemplate amqpTemplate;
 
     @BeforeEach
     public void setUp() {
-        challengeEventPub = new ChallengeEventPub(amqpTemplate,
+        challengeEventPub = new ChallengeEventPub(rabbitTemplate,
                 "test.topic");
     }
 
@@ -35,19 +39,20 @@ class ChallengeEventPubTest {
         ChallengeAttempt attempt = createTestAttempt(correct);
 
         // when
-        challengeEventPub.challengeSolved(attempt);
+            challengeEventPub.challengeSolved(attempt);
 
-        // then
-        var exchangeCaptor = ArgumentCaptor.forClass(String.class);
-        var routingKeyCaptor = ArgumentCaptor.forClass(String.class);
-        var eventCaptor = ArgumentCaptor.forClass(ChallengeSolvedEvent.class);
+            // then
+            var exchangeCaptor = ArgumentCaptor.forClass(String.class);
+            var routingKeyCaptor = ArgumentCaptor.forClass(String.class);
+            var eventCaptor = ArgumentCaptor.forClass(ChallengeSolvedEvent.class);
 
-        verify(amqpTemplate).convertAndSend(exchangeCaptor.capture(),
-                routingKeyCaptor.capture(), eventCaptor.capture());
-        then(exchangeCaptor.getValue()).isEqualTo("test.topic");
-        then(routingKeyCaptor.getValue()).isEqualTo("attempt." +
-                (correct ? "correct" : "wrong"));
-        then(eventCaptor.getValue()).isEqualTo(solvedEvent(correct));
+            verify(rabbitTemplate).convertAndSend(exchangeCaptor.capture(),
+                    routingKeyCaptor.capture(), eventCaptor.capture());
+            then(exchangeCaptor.getValue()).isEqualTo("test.topic");
+            then(routingKeyCaptor.getValue()).isEqualTo("attempt." +
+                    (correct ? "correct" : "wrong"));
+            then(eventCaptor.getValue()).isEqualTo(solvedEvent(correct));
+
     }
 
     private ChallengeAttempt createTestAttempt(boolean correct) {

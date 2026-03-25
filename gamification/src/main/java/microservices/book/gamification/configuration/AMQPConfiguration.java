@@ -23,13 +23,15 @@ public class AMQPConfiguration {
     public TopicExchange challengesTopicExchange(
             @Value("${amqp.exchange.attempts}") final String exchangeName) {
         return ExchangeBuilder.topicExchange(exchangeName).durable(true).build();
-//        return ExchangeBuilder.directExchange(exchangeName).durable(true).build();
     }
 
     @Bean
     public Queue gamificationQueue(
             @Value("${amqp.queue.gamification}") final String queueName) {
-        return QueueBuilder.durable(queueName).build();
+        return QueueBuilder.durable(queueName)
+//                .ttl((int)Duration.ofHours(6).toMillis())
+//                .maxLength(25000)
+                .build();
     }
 
     @Bean

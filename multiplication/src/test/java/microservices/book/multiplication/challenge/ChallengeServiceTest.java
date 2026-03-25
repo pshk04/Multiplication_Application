@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import java.io.IOException;
 import microservices.book.multiplication.user.User;
 import microservices.book.multiplication.user.UserRepository;
 
@@ -39,7 +39,7 @@ public class ChallengeServiceTest {
     }
 
     @Test
-    public void checkCorrectAttemptTest() {
+    public void checkCorrectAttemptTest(){
         // given
         given(attemptRepository.save(any()))
                 .will(returnsFirstArg());
@@ -54,6 +54,11 @@ public class ChallengeServiceTest {
         then(resultAttempt.isCorrect()).isTrue();
         verify(userRepository).save(new User("john_doe"));
         verify(attemptRepository).save(resultAttempt);
+//        try {
+//            verify(eventPub).challengeSolved(resultAttempt);
+//        }catch (IOException ce){
+//            System.err.println("Received 503 Service Unavailable: " + ce.getMessage());
+//        }
         verify(eventPub).challengeSolved(resultAttempt);
     }
 
@@ -73,6 +78,11 @@ public class ChallengeServiceTest {
         then(resultAttempt.isCorrect()).isFalse();
         verify(userRepository).save(new User("john_doe"));
         verify(attemptRepository).save(resultAttempt);
+//        try {
+//            verify(eventPub).challengeSolved(resultAttempt);
+//        }catch (IOException ce){
+//            System.err.println("Received 503 Service Unavailable: " + ce.getMessage());
+//        }
         verify(eventPub).challengeSolved(resultAttempt);
     }
 
@@ -96,6 +106,11 @@ public class ChallengeServiceTest {
         then(resultAttempt.getUser()).isEqualTo(existingUser);
         verify(userRepository, never()).save(any());
         verify(attemptRepository).save(resultAttempt);
+//        try {
+//            verify(eventPub).challengeSolved(resultAttempt);
+//        }catch (IOException ce){
+//            System.err.println("Received 503 Service Unavailable: " + ce.getMessage());
+//        }
         verify(eventPub).challengeSolved(resultAttempt);
     }
 
