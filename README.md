@@ -6,6 +6,7 @@ The application is built using below architectural patterns:
 2. Event Driven Microservices
 3. h2 database
 4. RabbitMQ for asynchronous messaging
+5. Spring Cloud Consul: Service Discovery and Load Balancing
 
 Application Flow:
 
