@@ -82,7 +82,11 @@ class ChallengeComponent extends React.Component {
                         this.refreshChallenge();
                     });
                 } else {
-                    this.updateMessage("Error: server error or not available");
+                    if(res.status === 503){
+                        this.updateMessage(" Error: RabbitMQ Broker is down!");
+                    }else{
+                        this.updateMessage(" Error: server error or not available ");
+                    }
                 }
             });
     }

@@ -10,6 +10,8 @@ import org.springframework.amqp.core.MessagePropertiesBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @Service
 public class ChallengeEventPub {
@@ -53,6 +55,7 @@ public class ChallengeEventPub {
                 rabbitTemplate.convertAndSend(challengesTopicExchange, routingKey, event, messagePostProcessor);
             } catch (RuntimeException ce){
                 System.err.println("Received 503 Service Unavailable: " + ce.getMessage());
+                throw new ServiceUnavailableException("External API is down for maintenance.");
             }
 //        rabbitTemplate.convertAndSend(challengesTopicExchange, routingKey, event);
     }
