@@ -8,10 +8,12 @@ spring:
     loadbalancer:
       ribbon:
         enabled: false
+      configurations: health-check
     consul:
       enabled: true
       discovery:
         query-passing: true
+        health-check-interval: 1m
 #        register: false
     gateway:
       routes:
@@ -44,3 +46,4 @@ spring:
 logging:
   level:
     org.springframework.cloud.gateway.handler.predicate: trace
+    org.springframework.cloud.loadbalancer: DEBUG
