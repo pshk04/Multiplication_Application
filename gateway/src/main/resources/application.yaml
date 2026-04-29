@@ -2,18 +2,25 @@
 server:
   port: 8000
 spring:
+  config:
+    import: "optional:consul:"
   application:
     name: gateway
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: pshankar26
   cloud:
     loadbalancer:
       ribbon:
         enabled: false
-      configurations: health-check
+#      configurations: health-check
     consul:
       enabled: true
       discovery:
         query-passing: true
-        health-check-interval: 1m
+#        health-check-interval: 1m
 #        register: false
     gateway:
       routes:
@@ -39,11 +46,9 @@ spring:
         - name: Retry
           args:
             retries: 3
-            methods: GET, POST
-#        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+            methods: GET,POST
 
 # Uncomment the configuration below if you want to enable route matching logs
 logging:
   level:
-    org.springframework.cloud.gateway.handler.predicate: trace
-    org.springframework.cloud.loadbalancer: DEBUG
+    org.springframework.amqp.rabbit.connection.CachingConnectionFactory: WARN

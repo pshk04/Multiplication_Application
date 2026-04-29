@@ -1,11 +1,100 @@
 Github:
 
-	https://github.com/Book-Microservices-v3/chapter07/
+	https://github.com/Book-Microservices-v3/chapter08c/
 
 H2 console:
 
 	http://localhost:8080/h2-console
 
+UI Home page:
 
+	http://localhost:3000/
+
+RabbitMQ:
+
+	Installation location:
+
+		/opt/homebrew/opt/rabbitmq/sbin
+
+	Console:
+
+		http://localhost:15672		
+
+
+	Starting RMQ:
+
+		brew services start rabbitmq
+		
+		brew services restart rabbitmq	
+
+
+	Password Change:
+
+		rabbitmqctl change_password guest <NEWPASSWORD>	
+
+
+
+Start microservices:
 	
+	default port (8080):
+		mvn -e spring-boot:run
+
+	duplicate instance port (9080 & 9081):
+
+		mvn -e spring-boot:run -Dspring-boot.run.arguments="--server.port=9080"
+
+		mvn -e spring-boot:run -Dspring-boot.run.arguments="--server.port=9081"
+
+
+Create a Consul agent:
+
+	consul agent -node=learnmicro -dev
+
+	logging:
+      level:
+        org.springframework.core.env: DEBUG
+
+    server:
+      port: 10080    
+
+
+To read additional config from Consul KV:
+
+	mvn -e spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=production"
+
+	mvn -e spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=production --server.port=9080"
+
+	mvn -e spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=production --server.port=9081"
+
+
+Log Aggregation:
+
+	Dependency Conflicts: You might have conflicting logging dependencies (e.g., both spring-boot-starter-logging and spring-boot-starter-log4j2 in the same project);
+
+		 <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+        
+	
+	 To verify that logback-core and logback-classic are using the exact same version.
+
+	 	mvn dependency:list | grep logback
+
+
+
+
+
+
+
 

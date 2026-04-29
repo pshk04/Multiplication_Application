@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    consul:
+      enabled: true
+      config:
+        data-key: application.yml
+        prefix: config
+        format: yaml
+        default-context: defaults
+        profile-separator: '-'
+        host: localhost
+        port: 8500
+        enabled: true
+
+logging:
+  level:
+    org.springframework.amqp.rabbit.connection.CachingConnectionFactory: WARN

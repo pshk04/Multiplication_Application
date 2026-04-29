@@ -10,7 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
-
+import org.springframework.context.annotation.Primary;
+//import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import java.time.Duration;
 
 /**
@@ -19,6 +20,7 @@ import java.time.Duration;
 @Configuration
 public class AMQPConfiguration {
 
+    @Primary
     @Bean
     public TopicExchange challengesTopicExchange(
             @Value("${amqp.exchange.attempts}") final String exchangeName) {
@@ -29,8 +31,12 @@ public class AMQPConfiguration {
     public Queue gamificationQueue(
             @Value("${amqp.queue.gamification}") final String queueName) {
         return QueueBuilder.durable(queueName)
-//                .ttl((int)Duration.ofHours(6).toMillis())
-//                .maxLength(25000)
+                .build();
+    }
+    @Bean
+    public TopicExchange logsExchange() {
+        return ExchangeBuilder.topicExchange("logs.topic")
+                .durable(true)
                 .build();
     }
 
@@ -60,5 +66,4 @@ public class AMQPConfiguration {
             final MessageHandlerMethodFactory messageHandlerMethodFactory) {
         return (c) -> c.setMessageHandlerMethodFactory(messageHandlerMethodFactory);
     }
-
 }

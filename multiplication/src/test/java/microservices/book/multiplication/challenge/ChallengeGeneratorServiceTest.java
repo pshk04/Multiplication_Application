@@ -17,17 +17,17 @@ public class ChallengeGeneratorServiceTest {
     private ChallengeGeneratorService challengeGeneratorService;
 
     @Spy
-    private Random random;
+    private Random randomGenerator;
 
     @BeforeEach
     public void setUp() {
-        challengeGeneratorService = new ChallengeGeneratorServiceImpl(random);
+        challengeGeneratorService = new ChallengeGeneratorServiceImpl(randomGenerator);
     }
 
     @Test
     public void generateRandomFactorIsBetweenExpectedLimits() {
         // 89 is max - min range
-        given(random.nextInt(89)).willReturn(20, 30);
+        given(randomGenerator.nextInt(89)).willReturn(20, 30);
 
         // when we generate a challenge
         Challenge challenge = challengeGeneratorService.randomChallenge();

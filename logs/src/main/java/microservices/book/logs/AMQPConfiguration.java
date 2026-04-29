@@ -1,11 +1,5 @@
-package microservices.book.multiplication.configuration;
+package microservices.book.logs;
 
-import org.springframework.amqp.core.ExchangeBuilder;
-import org.springframework.amqp.core.TopicExchange;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.springframework.amqp.core.*;
@@ -17,29 +11,28 @@ import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
 import org.springframework.context.annotation.Primary;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.context.annotation.Primary;
 
-/**
- * Configures RabbitMQ via AMQP abstraction to use events in our application.
- */
 @Configuration
 public class AMQPConfiguration {
-
-    @Bean
-    public TopicExchange challengesTopicExchange(
-            @Value("${amqp.exchange.attempts}") final String exchangeName) {
-        return ExchangeBuilder.topicExchange(exchangeName).durable(true).build();
-    }
-
+    @Primary
     @Bean
     public TopicExchange logsExchange() {
         return ExchangeBuilder.topicExchange("logs.topic")
                 .durable(true)
                 .build();
     }
+    @Bean
+    public Queue logsQueue() {
+        return QueueBuilder.durable("logs.queue").build();
+    }
 
     @Bean
-    public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
-        return new Jackson2JsonMessageConverter();
+    public Binding logsBinding(final Queue logsQueue,
+                               final TopicExchange logsExchange) {
+        return BindingBuilder.bind(logsQueue)
+                .to(logsExchange).with("#");
     }
 
 }

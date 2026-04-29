@@ -1,0 +1,35 @@
+<configuration debug="true">
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <springProperty scope="context" name="multiplication" source="spring.application.name" defaultValue="multiplication"/>
+    <springProperty scope="context" name="rabbitMQHost" source="spring.rabbitmq.host"/>
+    <springProperty scope="context" name="rmq.user" source="spring.rabbitmq.username" defaultValue="guest"/>
+    <springProperty scope="context" name="rmq.pass" source="spring.rabbitmq.password" defaultValue="pshankar26"/>
+
+    <appender name="AMQP"
+              class="org.springframework.amqp.rabbit.logback.AmqpAppender">
+        <layout>
+            <pattern>%d{HH:mm:ss.SSS} [%t] %logger{36} - %msg</pattern>
+        </layout>
+
+        <applicationId>multiplication</applicationId>
+        <host>${rabbitMQHost:-localhost}</host>
+        <port>5672</port>
+        <username>${rmq.user}</username>
+        <password>${rmq.pass}</password>
+        <routingKeyPattern>%property{applicationId}.%p</routingKeyPattern>
+        <exchangeName>logs.topic</exchangeName>
+        <exchangeType>topic</exchangeType>
+        <generateId>true</generateId>
+        <charset>UTF-8</charset>
+        <durable>true</durable>
+        <declareExchange>true</declareExchange>
+        <deliveryMode>PERSISTENT</deliveryMode>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="AMQP" />
+    </root>
+</configuration>
