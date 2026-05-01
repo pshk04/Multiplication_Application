@@ -1,6 +1,6 @@
 Github:
 
-	https://github.com/Book-Microservices-v3/chapter08c/
+	https://github.com/Book-Microservices-v3/chapter08d/
 
 H2 console:
 
@@ -92,9 +92,15 @@ Log Aggregation:
 	 	mvn dependency:list | grep logback
 
 
+Docker:
 
+	
+	docker image prune -a --filter "until=720h"
 
-
+	environment:
+	  - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=pshankar26
+	
 
 
 

@@ -8,9 +8,9 @@ spring:
         format: yaml
         default-context: defaults
         profile-separator: '-'
-        host: localhost
-        port: 8500
-        enabled: true
+#        host: localhost
+#        port: 8500
+#        enabled: true
 
 logging:
   level:
