@@ -2,11 +2,11 @@ version: "3"
 
 services:
   frontend:
-    image: challenges-frontend:1.0
+    image: pbikks04/challenges-frontend:0.0.1
     ports:
       - '3000:80'
   multiplication:
-    image: multiplication:0.0.1-SNAPSHOT
+    image: pbikks04/multiplication:0.0.1
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_CLOUD_CONSUL_HOST=consul
@@ -19,7 +19,7 @@ services:
     networks:
       - microservices
   gamification:
-    image: gamification:0.0.1-SNAPSHOT
+    image: pbikks04/gamification:0.0.1
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_CLOUD_CONSUL_HOST=consul
@@ -32,7 +32,7 @@ services:
     networks:
       - microservices
   gateway:
-    image: gateway:0.0.1-SNAPSHOT
+    image: pbikks04/gateway:0.0.1
     ports:
       - '8000:8000'
     environment:
@@ -47,7 +47,7 @@ services:
     networks:
       - microservices
   logs:
-    image: logs:0.0.1-SNAPSHOT
+    image: pbikks04/logs:0.0.1
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_CLOUD_CONSUL_HOST=consul
@@ -60,7 +60,7 @@ services:
     networks:
       - microservices
   consul-importer:
-    image: consul-importer:1.0
+    image: pbikks04/consul-importer:0.0.1
     depends_on:
       - consul-dev
     networks:

@@ -1,0 +1,17 @@
+[
+	{
+		"key": "config/",
+		"flags": 0,
+		"value": ""
+	},
+	{
+		"key": "config/defaults-docker/",
+		"flags": 0,
+		"value": ""
+	},
+	{
+		"key": "config/defaults-docker/application.yml",
+		"flags": 0,
+		"value": "c3ByaW5nOiAgICAgICAgICAKICByYWJiaXRtcToKICAgIGhvc3Q6IHJhYmJpdG1xICAgICAgICAgICAgICAgIAogIGNsb3VkOiAgICAgICAgICAgICAgICAKICAgIGNvbnN1bDoKICAgICAgZGlzY292ZXJ5OiAgICAgICAgICAgICAgICAKICAgICAgICBpbnN0YW5jZS1pZDogJHtzcHJpbmcuYXBwbGljYXRpb24ubmFtZX06JHtyYW5kb20udmFsdWV9"
+	}
+]
